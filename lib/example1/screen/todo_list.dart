@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:test_temp/bloc/todo_list_bloc.dart';
-import 'package:test_temp/item_provider.dart';
-import 'package:test_temp/modal/todo_response.dart';
-import 'package:test_temp/screen/todo_add.dart';
+import 'package:test_temp/example1/screen/todo_add.dart';
+
+import '../bloc/todo_list_bloc.dart';
+import '../modal/todo_response.dart';
+
 
 class ToDoListScreen extends StatefulWidget {
   const ToDoListScreen({Key? key}) : super(key: key);
