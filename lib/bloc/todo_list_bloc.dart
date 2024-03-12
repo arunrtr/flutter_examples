@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
 import 'package:test_temp/repositories/todo_list_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -12,12 +11,7 @@ class ToDoListBloc {
 
   getList() async {
     final result = await repository.getToDoList();
-    if (result is Response) {
-      final data = jsonDecode(result.body);
-      _subject.sink.add(data);
-    } else {
-      _subject.sink.add("");
-    }
+    _subject.sink.add(result);
   }
 }
 

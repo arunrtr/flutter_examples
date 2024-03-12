@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:test_temp/bloc/todo_list_bloc.dart';
 import 'package:test_temp/item_provider.dart';
+import 'package:test_temp/modal/todo_response.dart';
 import 'package:test_temp/screen/todo_add.dart';
 
 class ToDoListScreen extends StatefulWidget {
@@ -32,16 +33,16 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
         initialData: const {},
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data is Map && (snapshot.data as Map)["items"] != null) {
-              List arrData = (snapshot.data as Map)["items"];
+            if (snapshot.data is ToDoResponse) {
+              List<Item>? arrData = (snapshot.data as ToDoResponse).items;
               return ListView.builder(
-                  itemCount: arrData.length,
+                  itemCount: arrData?.length,
                   itemBuilder: (context, index) {
-                    final item = arrData[index];
+                    final item = arrData?[index];
                     return ListTile(
                       leading: Icon(Icons.favorite),
-                      title: Text(item["title"]),
-                      subtitle: Text(item["description"]),
+                      title: Text(item?.title ?? ""),
+                      subtitle: Text(item?.description ?? ""),
                       trailing: PopupMenuButton(
                         onSelected: (dynamic) {
                           print("clicked ${dynamic.runtimeType}");
@@ -56,7 +57,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           } else {
             return Center(child: Text("Something went wrong!"));
           }
-          return const CircularProgressIndicator();
+          return Center(child: const CircularProgressIndicator());
         },
       ),
       floatingActionButton: FloatingActionButton(
