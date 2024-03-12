@@ -49,8 +49,6 @@ class _ToDoAddScreenState extends State<ToDoAddScreen> {
                 _descriptionController.text = "";
                 print("Saved Successfully");
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Saved Succesfully")));
-                // Future.delayed(const Duration(seconds: 2));
-                // Navigator.of(context).pop();
 
                 final response = await ApiProvider().getTodoList();
                 if (response.statusCode == 200) {

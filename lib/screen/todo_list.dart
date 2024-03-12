@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_temp/item_provider.dart';
 import 'package:test_temp/screen/todo_add.dart';
-import 'package:test_temp/service/api_provider.dart';
 
 class ToDoListScreen extends StatefulWidget {
   const ToDoListScreen({Key? key}) : super(key: key);
@@ -57,20 +56,7 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           final routeToDoAdd = MaterialPageRoute(builder: (context) {
             return const ToDoAddScreen();
           });
-
           Navigator.push(context, routeToDoAdd);
-          // then((value) async {
-          //   print("After Success $value");
-          //   final response = await ApiProvider().getTodoList();
-          //   if (response.statusCode == 200) {
-          //     print("Get Success ${response.body}");
-          //     final result = jsonDecode(response.body);
-          //     arrItems = result["items"];
-          //     setState(() {});
-          //   } else {
-          //     print("Get Error ${response.statusCode}");
-          //   }
-          // });
         },
       ),
     );
