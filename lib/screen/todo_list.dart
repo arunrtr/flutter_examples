@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:test_temp/bloc/todo_list_bloc.dart';
 import 'package:test_temp/item_provider.dart';
 import 'package:test_temp/screen/todo_add.dart';
 
@@ -13,11 +13,12 @@ class ToDoListScreen extends StatefulWidget {
 }
 
 class _ToDoListScreenState extends State<ToDoListScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    blocToDoList.getList();
+
   }
 
   @override
@@ -26,29 +27,37 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
       appBar: AppBar(
         title: const Text("ToDo List"),
       ),
-      body: Consumer<ItemProvider>(
-        builder: (context, itemProviderModal, child) => Visibility(
-          visible: itemProviderModal.items.length > 0,
-          replacement: Center(child: Text("Please Add")),
-          child: ListView.builder(
-              itemCount: itemProviderModal.items.length,
-              itemBuilder: (context, index) {
-                final item = itemProviderModal.items[index];
-                return ListTile(
-                  leading: Icon(Icons.favorite),
-                  title: Text(item["title"]),
-                  subtitle: Text(item["description"]),
-                  trailing: PopupMenuButton(
-                    onSelected: (dynamic) {
-                      print("clicked ${dynamic.runtimeType}");
-                    },
-                    itemBuilder: (context) {
-                      return [PopupMenuItem(child: Text("Edit")), PopupMenuItem(child: Text("Delete"))];
-                    },
-                  ),
-                );
-              }),
-        ),
+      body: StreamBuilder(
+        stream: blocToDoList.subject.stream,
+        initialData: const {},
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data is Map && (snapshot.data as Map)["items"] != null) {
+              List arrData = (snapshot.data as Map)["items"];
+              return ListView.builder(
+                  itemCount: arrData.length,
+                  itemBuilder: (context, index) {
+                    final item = arrData[index];
+                    return ListTile(
+                      leading: Icon(Icons.favorite),
+                      title: Text(item["title"]),
+                      subtitle: Text(item["description"]),
+                      trailing: PopupMenuButton(
+                        onSelected: (dynamic) {
+                          print("clicked ${dynamic.runtimeType}");
+                        },
+                        itemBuilder: (context) {
+                          return [PopupMenuItem(child: Text("Edit")), PopupMenuItem(child: Text("Delete"))];
+                        },
+                      ),
+                    );
+                  });
+            }
+          } else {
+            return Center(child: Text("Something went wrong!"));
+          }
+          return const CircularProgressIndicator();
+        },
       ),
       floatingActionButton: FloatingActionButton(
         child: const Text("Add"),
@@ -56,7 +65,9 @@ class _ToDoListScreenState extends State<ToDoListScreen> {
           final routeToDoAdd = MaterialPageRoute(builder: (context) {
             return const ToDoAddScreen();
           });
-          Navigator.push(context, routeToDoAdd);
+          Navigator.push(context, routeToDoAdd).then((value) {
+            blocToDoList.getList();
+          });
         },
       ),
     );
