@@ -22,6 +22,8 @@ class HomeLoadingState extends HomeState {
 class HomeLoadedSuccessState extends HomeState {
   @override
   List<Object?> get props => throw UnimplementedError();
+  final List<ProductModal> products;
+  const HomeLoadedSuccessState({required this.products});
 }
 
 class HomeErrorState extends HomeState {
@@ -38,9 +40,10 @@ class HomeProductCartActionState extends HomeActionState {
   @override
   List<Object?> get props => throw UnimplementedError();
 }
+
 class HomeNavigateToWishlistActionState extends HomeActionState {
-@override
-List<Object?> get props => throw UnimplementedError();
+  @override
+  List<Object?> get props => throw UnimplementedError();
 }
 
 class HomeNavigateToCartActionState extends HomeActionState {
