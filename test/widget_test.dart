@@ -11,76 +11,32 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-  PetrolIml obj = PetrolIml();
-  GasImpl obj1 = GasImpl();
+
+  SQLService sqlService = SQLService();
+  UserRepository repository = UserRepository(sqlService);
+  User objUser = User(repository);
+  objUser.insertData();
+
 }
-
-// If class Car has all the functionalities then subclass has to behave same way as parent. But it will
-// give unneccessary exposure of methods.
-
-class Car {
-  drive() {
-    print("Drive");
+// Problem- High level class is dependant on low level class for
+// ex: UserRepo is dependant on SQLService. So we have to design abstraction between them.
+class UserRepository {
+  SQLService sqlService;
+  UserRepository(this.sqlService);
+}
+class SQLService{
+  insertData() {
+    print("insert Data");
   }
-
-  applyBrake() {
-    print("Applying Brake");
+  deleteData() {
+    print("delete Data");
   }
 }
-
-class Petrol {
-  fillPetrol() {
-    print("Petrol Impl");
-  }
-}
-
-abstract class PetrolCar implements Car, Petrol {}
-
-class PetrolIml extends PetrolCar {
-  @override
-  applyBrake() {
-    // TODO: implement applyBrake
-    throw UnimplementedError();
-  }
-
-  @override
-  drive() {
-    // TODO: implement drive
-    throw UnimplementedError();
-  }
-
-  @override
-  fillPetrol() {
-    // TODO: implement fillPetrol
-    throw UnimplementedError();
+class User {
+  UserRepository repository;
+  User(this.repository);
+  insertData() {
+    repository.sqlService.insertData();
   }
 }
 
-//Same way for class Gas
-class Gas {
-  fillGas() {
-    print("Fill Gas");
-  }
-}
-
-abstract class GasCar implements Gas, Car {}
-
-class GasImpl extends GasCar {
-  @override
-  applyBrake() {
-    // TODO: implement applyBrake
-    throw UnimplementedError();
-  }
-
-  @override
-  drive() {
-    // TODO: implement drive
-    throw UnimplementedError();
-  }
-
-  @override
-  fillGas() {
-    // TODO: implement fillGas
-    throw UnimplementedError();
-  }
-}
