@@ -11,14 +11,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() async{
-  await for(final num in streamExample1() ) {
-      print(num);
+
+  final result = getFullName().asyncExpand((name) => getCharacters(name));
+  await for(final str in result){
+    print(str);
   }
 }
 
-Stream<int> streamExample1() async* {
-  for (int i = 0; i < 10; i++) {
-    await Future.delayed(const Duration(seconds: 1));
-    yield i;
-  }
+Stream<String> getCharacters(String name) async* {
+    for(int i = 0; i<name.length; i++){
+       await Future.delayed(const Duration(seconds: 1));
+       yield name[i];
+    }
+}
+
+Stream<String> getFullName() async* {
+  await Future.delayed(const Duration(seconds: 3));
+  yield "Arun";
+
+  await Future.delayed(const Duration(seconds: 3));
+  yield "Kumar";
+
 }
