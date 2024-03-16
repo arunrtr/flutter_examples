@@ -11,15 +11,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-
-  print("${"aru".isValid()}");
-  print("${"".isValid()}");
+  final LazyLogger singleton = LazyLogger();
+  print(singleton.name);
+  final EagerLogger singleton1 = EagerLogger();
+  print(singleton1.name);
 
 }
 
-extension on String {
-
-  bool isValid() {
-    return this != null && this.isNotEmpty  ? true : false;
+class LazyLogger {
+  static LazyLogger? _instance;
+  factory LazyLogger() {
+   return _instance ?? LazyLogger._();
   }
+  LazyLogger._(){
+   _instance = this;
+  }
+  String get name => "arun";
+}
+
+class EagerLogger {
+  static final EagerLogger _instance = EagerLogger._();
+  EagerLogger._();
+  factory EagerLogger () => _instance;
+
+  String get name => "varun";
 }
