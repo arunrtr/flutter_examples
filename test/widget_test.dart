@@ -11,28 +11,62 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-  final LazyLogger singleton = LazyLogger();
-  print(singleton.name);
-  final EagerLogger singleton1 = EagerLogger();
-  print(singleton1.name);
-
+  Shape objCircle = Shape.of(Circle(radius: 2.0));
+  Shape objRectangle = Shape.of(Rectangle(length: 5));
+  objCircle.calculateArea();
+  objRectangle.calculateArea();
 }
 
-class LazyLogger {
-  static LazyLogger? _instance;
-  factory LazyLogger() {
-   return _instance ?? LazyLogger._();
-  }
-  LazyLogger._(){
-   _instance = this;
-  }
-  String get name => "arun";
+abstract class AreaCalculator {
+  late num param;
+
+  calculateArea();
 }
 
-class EagerLogger {
-  static final EagerLogger _instance = EagerLogger._();
-  EagerLogger._();
-  factory EagerLogger () => _instance;
+class Shape {
+  AreaCalculator? type;
 
-  String get name => "varun";
+  Shape.of(this.type);
+
+  calculateArea() {
+    print("Area of = ${type?.runtimeType} is ${type?.calculateArea()}");
+  }
+}
+
+class Circle extends AreaCalculator {
+  Circle({required double radius}) {
+    param = radius;
+  }
+
+  @override
+  num calculateArea() {
+    return 3.14 * param * param;
+  }
+}
+
+class Rectangle extends AreaCalculator {
+  Rectangle({required int length}) {
+    param = length;
+  }
+
+  @override
+  calculateArea() {
+    return param * param;
+  }
+}
+
+// here is the issue as its keeps on modifying the esxisting class
+class AreaCalculatorOrg {
+  String? type;
+  num? param;
+  num calculateArea() {
+    if(type == "circle") {
+      return 3.14*param!*param!;
+    }else if (type == "rectangle") {
+      return param! * param!;
+    }
+    
+    return 0.0;
+  }
+
 }
