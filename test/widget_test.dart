@@ -11,39 +11,76 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-  Animal objAnimal = Animal();
-  objAnimal.walk();
-
-  Human objHuman = Human();
-  objHuman.walk();
-  objHuman.sing();
-  objHuman.run();
+  PetrolIml obj = PetrolIml();
+  GasImpl obj1 = GasImpl();
 }
 
-mixin CanWalk on CanRun {
-  walk() {
-    print("CanWalk");
+// If class Car has all the functionalities then subclass has to behave same way as parent. But it will
+// give unneccessary exposure of methods.
+
+class Car {
+  drive() {
+    print("Drive");
+  }
+
+  applyBrake() {
+    print("Applying Brake");
+  }
+}
+
+class Petrol {
+  fillPetrol() {
+    print("Petrol Impl");
+  }
+}
+
+abstract class PetrolCar implements Car, Petrol {}
+
+class PetrolIml extends PetrolCar {
+  @override
+  applyBrake() {
+    // TODO: implement applyBrake
+    throw UnimplementedError();
   }
 
   @override
-  run() {
-    print("Can Walk: Running");
+  drive() {
+    // TODO: implement drive
+    throw UnimplementedError();
   }
-}
-mixin CanRun {
-  run() {
-    print("Can Run: Running");
-  }
-}
-mixin CanSing {
-  sing() {
-    print("Can Sing");
+
+  @override
+  fillPetrol() {
+    // TODO: implement fillPetrol
+    throw UnimplementedError();
   }
 }
 
-//Note: if two same methods are defined on mixin then last confirmed mixin will be picked.
-class Human with  CanSing, CanRun,CanWalk {}
+//Same way for class Gas
+class Gas {
+  fillGas() {
+    print("Fill Gas");
+  }
+}
 
-// NOte: if we are applying/confirmimg mixin on mixin, then with class we have to use both
-// mixins and specific order for example below will not work if we use class Animal with CanWalk, CanRun {}
-class Animal with  CanRun, CanWalk {}
+abstract class GasCar implements Gas, Car {}
+
+class GasImpl extends GasCar {
+  @override
+  applyBrake() {
+    // TODO: implement applyBrake
+    throw UnimplementedError();
+  }
+
+  @override
+  drive() {
+    // TODO: implement drive
+    throw UnimplementedError();
+  }
+
+  @override
+  fillGas() {
+    // TODO: implement fillGas
+    throw UnimplementedError();
+  }
+}
