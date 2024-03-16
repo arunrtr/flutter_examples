@@ -11,32 +11,43 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
+  //SQLService service = SQLService();
+  MYSQLService service = MYSQLService();
 
-  SQLService sqlService = SQLService();
-  UserRepository repository = UserRepository(sqlService);
+  UserRepository repository = UserRepository(service);
   User objUser = User(repository);
   objUser.insertData();
+}
 
+abstract class DataBaseService {
+  insertData();
 }
-// Problem- High level class is dependant on low level class for
-// ex: UserRepo is dependant on SQLService. So we have to design abstraction between them.
-class UserRepository {
-  SQLService sqlService;
-  UserRepository(this.sqlService);
-}
-class SQLService{
+class SQLService extends DataBaseService{
+  @override
   insertData() {
-    print("insert Data");
+      print("Inserting Data");
   }
-  deleteData() {
-    print("delete Data");
+}
+
+class MYSQLService extends DataBaseService {
+  @override
+  insertData() {
+    print("Inserting MYSQL Data");
   }
+}
+
+class UserRepository {
+  DataBaseService service;
+  UserRepository(this.service);
+
 }
 class User {
   UserRepository repository;
   User(this.repository);
-  insertData() {
-    repository.sqlService.insertData();
+  insertData(){
+    repository.service.insertData();
+
   }
 }
+
 
