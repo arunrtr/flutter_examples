@@ -10,6 +10,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:test_temp/main.dart';
 
-void main() {
+void main() async{
+  await for(final num in streamExample1() ) {
+      print(num);
+  }
+}
 
+Stream<int> streamExample1() async* {
+  for (int i = 0; i < 10; i++) {
+    await Future.delayed(const Duration(seconds: 1));
+    yield i;
+  }
 }
