@@ -11,15 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-  final double resultDouble = add(5.0, 6.0);
-  final int resultInt = add(5, 6);
-  final double resultMix = add(5.0, 6);
-  print(resultDouble);
-  print(resultInt);
-  print(resultMix);
+
+  print("${"aru".isValid()}");
+  print("${"".isValid()}");
 
 }
 
-T add <T extends num > (T lhs, T rhs) {
-  return (lhs + rhs) as T ;
+extension on String {
+
+  bool isValid() {
+    return this != null && this.isNotEmpty  ? true : false;
+  }
 }
