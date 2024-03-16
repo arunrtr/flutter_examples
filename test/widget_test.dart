@@ -10,13 +10,16 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:test_temp/main.dart';
 
-void main() async{
-  print("Started");
-  print(await getName());
-  print("end");
+void main() {
+  final double resultDouble = add(5.0, 6.0);
+  final int resultInt = add(5, 6);
+  final double resultMix = add(5.0, 6);
+  print(resultDouble);
+  print(resultInt);
+  print(resultMix);
+
 }
 
-Future<String> getName() async {
-  await Future.delayed(const Duration(seconds: 10));
-  return "Arun";
+T add <T extends num > (T lhs, T rhs) {
+  return (lhs + rhs) as T ;
 }
