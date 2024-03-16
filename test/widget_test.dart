@@ -11,5 +11,5 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-print("Hello world");
+
 }
