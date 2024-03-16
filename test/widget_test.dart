@@ -11,62 +11,39 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-  Shape objCircle = Shape.of(Circle(radius: 2.0));
-  Shape objRectangle = Shape.of(Rectangle(length: 5));
-  objCircle.calculateArea();
-  objRectangle.calculateArea();
+  Animal objAnimal = Animal();
+  objAnimal.walk();
+
+  Human objHuman = Human();
+  objHuman.walk();
+  objHuman.sing();
+  objHuman.run();
 }
 
-abstract class AreaCalculator {
-  late num param;
-
-  calculateArea();
-}
-
-class Shape {
-  AreaCalculator? type;
-
-  Shape.of(this.type);
-
-  calculateArea() {
-    print("Area of = ${type?.runtimeType} is ${type?.calculateArea()}");
-  }
-}
-
-class Circle extends AreaCalculator {
-  Circle({required double radius}) {
-    param = radius;
+mixin CanWalk on CanRun {
+  walk() {
+    print("CanWalk");
   }
 
   @override
-  num calculateArea() {
-    return 3.14 * param * param;
+  run() {
+    print("Can Walk: Running");
+  }
+}
+mixin CanRun {
+  run() {
+    print("Can Run: Running");
+  }
+}
+mixin CanSing {
+  sing() {
+    print("Can Sing");
   }
 }
 
-class Rectangle extends AreaCalculator {
-  Rectangle({required int length}) {
-    param = length;
-  }
+//Note: if two same methods are defined on mixin then last confirmed mixin will be picked.
+class Human with  CanSing, CanRun,CanWalk {}
 
-  @override
-  calculateArea() {
-    return param * param;
-  }
-}
-
-// here is the issue as its keeps on modifying the esxisting class
-class AreaCalculatorOrg {
-  String? type;
-  num? param;
-  num calculateArea() {
-    if(type == "circle") {
-      return 3.14*param!*param!;
-    }else if (type == "rectangle") {
-      return param! * param!;
-    }
-    
-    return 0.0;
-  }
-
-}
+// NOte: if we are applying/confirmimg mixin on mixin, then with class we have to use both
+// mixins and specific order for example below will not work if we use class Animal with CanWalk, CanRun {}
+class Animal with  CanRun, CanWalk {}
