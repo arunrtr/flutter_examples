@@ -13,6 +13,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
 
   HomeBloc() : super(HomeInitialState()) {
     on<HomeInitialEvent>(homeInitialEvent);
+    on<HomeSearchClickedEvent>(homeSearchClickedEvent);
   }
 
   FutureOr<void> homeInitialEvent(HomeInitialEvent event, Emitter<HomeState> emit) async {
@@ -20,5 +21,17 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit.call(HomeLoadingState());
     final data = await repository.fetchProduct();
     emit.call(HomeLoadedSuccessState(data));
+  }
+
+  FutureOr<void> homeSearchClickedEvent(HomeSearchClickedEvent event, Emitter<HomeState> emit) {
+    emit.call(HomeSearchLoading());
+    final data = event.products.where((element) {
+      String title = element["description"];
+      if (title.toLowerCase().contains(event.searchText)) {
+        return true;
+      }
+      return false;
+    }).toList();
+    emit.call(HomeSearchResultLoaded(data));
   }
 }
