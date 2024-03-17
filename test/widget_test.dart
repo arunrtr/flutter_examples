@@ -5,49 +5,30 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:isolate';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:test_temp/main.dart';
 
-void main() {
-  //SQLService service = SQLService();
-  MYSQLService service = MYSQLService();
-
-  UserRepository repository = UserRepository(service);
-  User objUser = User(repository);
-  objUser.insertData();
-}
-
-abstract class DataBaseService {
-  insertData();
-}
-class SQLService extends DataBaseService{
-  @override
-  insertData() {
-      print("Inserting Data");
+void main() async {
+  await for(String value in getMessage().take(10)) {
+    print("$value");
   }
 }
+Stream<String> getMessage() {
+  ReceivePort rp = ReceivePort();
+  return Isolate.spawn(_getMessage, rp.sendPort)
+      .asStream()
+      .asyncExpand((_) => rp)
+      .takeWhile((element) => element is String)
+      .cast();
+}
 
-class MYSQLService extends DataBaseService {
-  @override
-  insertData() {
-    print("Inserting MYSQL Data");
+_getMessage(SendPort sp) async {
+  await for (final value in Stream.periodic(const Duration(seconds: 1), (_) => "2")) {
+    sp.send(value);
   }
 }
-
-class UserRepository {
-  DataBaseService service;
-  UserRepository(this.service);
-
-}
-class User {
-  UserRepository repository;
-  User(this.repository);
-  insertData(){
-    repository.service.insertData();
-
-  }
-}
-
 
