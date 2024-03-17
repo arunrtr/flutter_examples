@@ -13,8 +13,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() async {
-
+Person objPerson = Person();
+objPerson.setFirstName("Arun");
+objPerson.setLastName("kumar");
+print(objPerson.fullName);
 }
 
 
+class Person {
+  late String _firstName;
+  late String _lastName;
 
+  setFirstName(String s){
+    _firstName = s;
+  }
+  setLastName(String s){
+    _lastName = s;
+  }
+  String get fullName => _firstName+_lastName;
+
+
+}
