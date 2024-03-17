@@ -1,77 +1,80 @@
+import 'dart:convert';
 import 'dart:isolate';
 
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 void main() {
   runApp(MaterialApp(
     title: 'Flutter',
     theme: ThemeData.dark(),
-    home: const TestScreen(),
+    home: TestScreen(),
   ));
 }
 
-class TestScreen extends StatelessWidget {
+class TestScreen extends StatefulWidget {
   const TestScreen({Key? key}) : super(key: key);
+
+  @override
+  State<TestScreen> createState() => _TestScreenState();
+}
+
+class _TestScreenState extends State<TestScreen> {
+  final ScrollController _scrollController = ScrollController();
+  List<dynamic> arrData = [];
+  int skip = 0;
+  bool isLoadingMore = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData(skip);
+    _scrollController.addListener(() {
+      if (isLoadingMore) return;
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        print("Api Called");
+        skip += 20;
+        isLoadingMore = true;
+        fetchData(skip);
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Test"),
+        title: const Text("Pagination"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 10,),
-          Center(child: ElevatedButton(
-            child: Text("Download Data"),
-            onPressed: () => useIsolates(),)),
-        ],
-      ),
+      body: arrData.isNotEmpty
+          ? ListView.builder(
+              controller: _scrollController,
+              itemCount: isLoadingMore ? arrData.length + 1 : arrData.length,
+              itemBuilder: (ctx, index) {
+                Map<String, dynamic> data = arrData[index];
+                if (index + 1 == arrData.length) {
+                  //last index
+                  return Center(child: CircularProgressIndicator());
+                } else {
+                  return ListTile(
+                    leading: Text(data["id"].toString()),
+                    title: Text(data["title"]),
+                    subtitle: Text(data["description"]),
+                  );
+                }
+              })
+          : CircularProgressIndicator(),
     );
   }
-}
 
-useWithoutIsolates() {
-  int value =0;
-  for(int i= 0; i< 4000000000; i++){
-    value += i;
+  fetchData(int skip) async {
+    Dio dio = Dio();
+    final response = await dio.get("https://dummyjson.com/products?limit=20&skip=$skip");
+    final result = response.data;
+    setState(() {
+      arrData = arrData + result["products"]; // important: data
+      // should be appended to previous array
+      isLoadingMore = false;
+    });
   }
-  print(value);
-
 }
-
-useIsolates() async {
-  final ReceivePort rp = ReceivePort();
-  // without try catch
-  await Isolate.spawn(heavyTask, [rp.sendPort, 4000000000]);
-  final response = await rp.first;
-  print(response);
-
-  // try catch example
-  // try {
-  //   await Isolate.spawn(heavyTask, [rp.sendPort, 4000000000]);
-  //
-  // } on Object {
-  //     debugPrint("Isolated Failed");
-  //     rp.close();
-  // }
-  //
-  // final response = await rp.first;
-  // print(response);
-
-}
-
-heavyTask(List<dynamic> args){
-  SendPort sendPort = args[0];
-  int limit = args[1];
-  int value =0;
-  for(int i= 0; i< limit; i++){
-    value += i;
-  }
-  // We can use either send or isolates exit, at receving side it should be first index
-  sendPort.send(value);
-  //Isolate.exit(sendPort,value);
-}
-
