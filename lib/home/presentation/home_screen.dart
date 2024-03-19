@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_temp/home/presentation/bloc/home_bloc.dart';
+import 'package:test_temp/home/presentation/detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,7 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
   HomeBloc homeBloc = HomeBloc();
   TextEditingController _textEditingController = TextEditingController();
   final List<dynamic> arrProducts = [];
-
 
   @override
   void initState() {
@@ -55,10 +55,10 @@ class _HomeScreenState extends State<HomeScreen> {
               case HomeLoadedSuccessState:
                 final List<dynamic> products = (state as HomeLoadedSuccessState).products;
                 arrProducts.addAll(products);
-                return createListview(products);
+                return createListview(products, context);
               case HomeSearchResultLoaded:
                 final List<dynamic> products = (state as HomeSearchResultLoaded).products;
-                return createListview(products);
+                return createListview(products, context);
               case HomeErrorState:
                 return const Scaffold(body: Center(child: Text("Something went Wrong!")));
             }
@@ -67,22 +67,27 @@ class _HomeScreenState extends State<HomeScreen> {
         ));
   }
 
-  ListView createListview(List<dynamic> products) {
+  ListView createListview(List<dynamic> products, BuildContext mainCtx) {
     return ListView.builder(
-                  itemCount: products.length,
-                  itemBuilder: (ctx, index) {
-                    Map<String, dynamic> product = products[index];
-                    return ListTile(
-                      leading: Container(
-                          width: 100,
-                          height: 100,
-                          child: Image.network(
-                            product["thumbnail"],
-                            fit: BoxFit.fill,
-                          )),
-                      title: Text(product["title"]),
-                      subtitle: Text(product["description"]),
-                    );
-                  });
+        itemCount: products.length,
+        itemBuilder: (ctx, index) {
+          Map<String, dynamic> product = products[index];
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(mainCtx).push(MaterialPageRoute(builder: (ctx) => const DetailScreen()));
+            },
+            child: ListTile(
+              leading: Container(
+                  width: 100,
+                  height: 100,
+                  child: Image.network(
+                    product["thumbnail"],
+                    fit: BoxFit.fill,
+                  )),
+              title: Text(product["title"]),
+              subtitle: Text(product["description"]),
+            ),
+          );
+        });
   }
 }
