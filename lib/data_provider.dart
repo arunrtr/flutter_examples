@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 
-class DataProvider extends InheritedWidget {
-  final Widget child;
-  final int value;
-  DataProvider({required this.child, required this.value}) : super(child: child);
+class DataProvider extends ChangeNotifier {
+  int counter = 0;
 
-  static DataProvider? of (BuildContext context){
-    return context.dependOnInheritedWidgetOfExactType<DataProvider>();
+  updateCounter() {
+    counter += 1;
+    notifyListeners();
   }
-  @override
-  bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    return true;
-  }
-
 
 }
