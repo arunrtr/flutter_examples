@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:test_temp/feature/view_modal/home_view_modal.dart';
+import 'package:test_temp/demo_screen.dart';
+import 'package:test_temp/home_screen.dart';
 
-import 'feature/presentation/home_screen.dart';
-void main() {
+main() {
   runApp( MaterialApp(
     theme: ThemeData.dark(),
-      home:  HomeScreen()));
+      home: DemoScreen()));
 }
-
-
-

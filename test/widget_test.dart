@@ -10,6 +10,33 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:test_temp/main.dart';
 
-void main() {
-print("Hello world");
+void main() async {
+  print("Hello world");
+  List<String> arrBands = ["Metallica", "Foo Fighters", "Pink Floyd", "Nirvana"];
+
+   await for (String name in getNames()) {
+    print("$name \n");
+  }
+
+  List<int> arr = List.filled(5, 1);
+   print(arr);
+
+  List<int> l = [1, 2, 3, 4];
+  List<int> r = [3, 4];
+
+  l.removeWhere((element) => r.contains(element));
+ print("Value is $l");
+
 }
+
+Stream<String> getNames() async* {
+
+  await Future.delayed(const Duration(seconds: 1));
+  yield "Arun";
+  await Future.delayed(const Duration(seconds: 3));
+  yield "Varun";
+
+}
+
+
+
