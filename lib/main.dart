@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:test_temp/demo_screen.dart';
-import 'package:test_temp/home_screen.dart';
+import 'package:test_temp/feature/presentation/home_screen.dart';
 
 main() {
-  runApp( MaterialApp(
-    theme: ThemeData.dark(),
-      home: DemoScreen()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, theme: ThemeData.dark(), home: const HomeScreen()));
 }
