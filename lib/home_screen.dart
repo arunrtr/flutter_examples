@@ -15,12 +15,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     widget.arrChildren = [
       Padding(
-        key: ObjectKey(1),
+        key: ValueKey(1),
         padding: const EdgeInsets.all(8.0),
         child: ColorWidget( num: 1,),
       ),
       Padding(
-        key: ObjectKey(2),
+        key: ValueKey(2),
         padding: const EdgeInsets.all(8.0),
         child: ColorWidget( num: 2,),
       )
