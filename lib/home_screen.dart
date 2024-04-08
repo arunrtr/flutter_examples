@@ -1,38 +1,53 @@
 import 'package:flutter/material.dart';
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
+import 'package:test_temp/color_widget.dart';
 
-  final childState = GlobalKey<_CounterWidgetState>();
+class HomeScreen extends StatefulWidget {
+  List<Widget> arrChildren = [];
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.arrChildren = [
+      Padding(
+        key: UniqueKey(),
+        padding: const EdgeInsets.all(8.0),
+        child: ColorWidget( num: 1,),
+      ),
+      Padding(
+        key: UniqueKey(),
+        padding: const EdgeInsets.all(8.0),
+        child: ColorWidget( num: 2,),
+      )
+    ];
+
+  }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      appBar: AppBar(title: Text("Global Key"),),
-      body: Center(child: CounterWidget(key: childState,)),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        childState.currentState!._onIncrement();
-        print("Value is ${childState.currentState!._value}");
-      },
-      child: Text("Click me"),),
+        appBar: AppBar(
+          title: Text('Home Page'),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            final child = widget.arrChildren.removeAt(0);
+            widget.arrChildren.insert(1, child);
+            setState((){});
+          },
+          child: Icon(Icons.swap_horiz, size: 20,),
+        ),
+        body: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: widget.arrChildren
+          ),
+        )
     );
   }
 }
-
-class CounterWidget extends StatefulWidget {
-  const CounterWidget({Key? key}) : super(key: key);
-
-  @override
-  State<CounterWidget> createState() => _CounterWidgetState();
-}
-
-class _CounterWidgetState extends State<CounterWidget> {
-  int _value  = 0;
-  @override
-  Widget build(BuildContext context) {
-    return Text("Counter : ${_value}");
-  }
-  _onIncrement() {
-    _value += 1;
-    setState((){});
-  }
-}
-
