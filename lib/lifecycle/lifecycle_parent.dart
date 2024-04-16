@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_temp/home_screen.dart';
+import 'package:test_temp/my_inherited_widget.dart';
 
 class LifeCycleParent extends StatefulWidget {
   const LifeCycleParent({Key? key}) : super(key: key);
@@ -21,7 +23,7 @@ class _LifeCycleParentState extends State<LifeCycleParent> {
   @override
   Widget build(BuildContext context) {
     print("Parent- Build");
-
+    String name = MyInheritedWidget.of(context)?.name ?? "";
     return Scaffold(
       appBar: AppBar(
         title: Text("LifeCycle"),
@@ -32,11 +34,12 @@ class _LifeCycleParentState extends State<LifeCycleParent> {
             ElevatedButton(
                 onPressed: () {
                   print("Reset Pressed");
-                  setState(() {
-                    number.value++;
-                  });
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => HomeScreen()));
+                  // setState(() {
+                  //   number.value++;
+                  // });
                 },
-                child: Text("Reset")),
+                child: Text("Reset $name")),
             LifeCycleChild(
               number: number,
             )
