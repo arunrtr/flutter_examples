@@ -8,31 +8,38 @@ class AnimationDemo extends StatefulWidget {
 }
 
 class _AnimationDemoState extends State<AnimationDemo> {
-
   double marginTop = 220.0;
   double heightTemp = 100.0;
+  late ColorTween _tween;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tween = ColorTween(begin: Colors.red, end: Colors.amber);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Animation Demo"),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          setState((){
-            marginTop = 20;
-            heightTemp = 0;
-
-          });
-        },
-        child: AnimatedContainer(
-          duration: const Duration(seconds: 3),
-          margin: EdgeInsets.only(top: marginTop),
-          width: 100,
-          height: heightTemp,
-          color: Colors.red,
+        appBar: AppBar(
+          title: Text("Animation Demo"),
         ),
-      ),
-    );
+        body: Center(
+          child: TweenAnimationBuilder(
+              // tween: _tween
+              tween: Tween<double>(begin: 1.0, end: 0.0),
+              duration: Duration(seconds: 4),
+              builder: (ctx, value, widget) {
+                return Opacity(
+                  opacity: (value as double),
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    color: Colors.red,
+                  ),
+                );
+              }),
+        ));
   }
 }
