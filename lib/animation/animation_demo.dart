@@ -7,16 +7,21 @@ class AnimationDemo extends StatefulWidget {
   State<AnimationDemo> createState() => _AnimationDemoState();
 }
 
-class _AnimationDemoState extends State<AnimationDemo> {
-  double marginTop = 220.0;
-  double heightTemp = 100.0;
-  late ColorTween _tween;
+class _AnimationDemoState extends State<AnimationDemo> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation _colorAnimation;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tween = ColorTween(begin: Colors.red, end: Colors.amber);
+    _animationController = AnimationController(duration: Duration(milliseconds: 2000), vsync: this);
+
+    _colorAnimation = ColorTween(begin: Colors.grey, end: Colors.red).animate(_animationController);
+    _animationController.addListener(() {
+      //print(_animationController.value);
+      print(_colorAnimation.value);
+    });
   }
 
   @override
@@ -25,21 +30,20 @@ class _AnimationDemoState extends State<AnimationDemo> {
         appBar: AppBar(
           title: Text("Animation Demo"),
         ),
-        body: Center(
-          child: TweenAnimationBuilder(
-              // tween: _tween
-              tween: Tween<double>(begin: 1.0, end: 0.0),
-              duration: Duration(seconds: 4),
-              builder: (ctx, value, widget) {
-                return Opacity(
-                  opacity: (value as double),
-                  child: Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.red,
-                  ),
-                );
-              }),
+        body: AnimatedBuilder(
+          animation: _animationController,
+          builder: (ctx, widget) {
+            return Center(
+                child: IconButton(
+              onPressed: () {
+                _animationController.forward();
+
+              },
+              icon: const Icon(Icons.favorite),
+              color: _colorAnimation.value,
+              iconSize: 50,
+            ));
+          },
         ));
   }
 }
