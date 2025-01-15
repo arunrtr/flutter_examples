@@ -11,5 +11,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:test_temp/main.dart';
 
 void main() {
-print("Hello world");
+
+swapTwoNumbers(2, 3);
+}
+
+
+swapTwoNumbers(int a, int b) {
+  print('Before Swap a = $a, b=$b');
+  a = a+b;
+  b = a-b;
+  a = a-b;
+  print('After Swap a = $a, b=$b');
 }
