@@ -12,14 +12,18 @@ import 'package:test_temp/main.dart';
 
 void main() {
 
-swapTwoNumbers(2, 3);
+fibonacciSeries(2, 3, 5);
 }
 
 
-swapTwoNumbers(int a, int b) {
-  print('Before Swap a = $a, b=$b');
-  a = a+b;
-  b = a-b;
-  a = a-b;
-  print('After Swap a = $a, b=$b');
+fibonacciSeries(int first, int second, int n) {
+
+  print("Below is the Fibonacci Series \n$first \n$second");
+  for(int i = 0; i <5 ; i++) {
+    int third = first + second;
+    first = second;
+    second = third;
+    print("$third\n");
+  }
+
 }
