@@ -5,21 +5,28 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-
 void main() {
+//fibonacciSeries(2, 3, 5);
 
-fibonacciSeries(2, 3, 5);
+  print('The factorial of n = ${getFactorial(6)}');
 }
 
-
 fibonacciSeries(int first, int second, int n) {
-
   print("Below is the Fibonacci Series \n$first \n$second");
-  for(int i = 0; i <5 ; i++) {
+  for (int i = 0; i < 5; i++) {
     int third = first + second;
     first = second;
     second = third;
     print("$third\n");
   }
+}
 
+int getFactorial(int n) {
+  int result = 1;
+  if (n == 1) {
+    return 1;
+  } else {
+    result = n * getFactorial(n - 1);
+  }
+  return result;
 }
