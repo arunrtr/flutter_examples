@@ -1,6 +1,16 @@
 void main() {
- // print("The reverse of ${reverseArray([1, 2, 3, 4])}");
-  print("The good pair is ${goodPair([1, 2, 3, 1, 1, 3])}");
+  // print("The reverse of ${reverseArray([1, 2, 3, 4])}");
+  //print("The good pair is ${goodPair([1, 2, 3, 1, 1, 3])}");
+  print("The Missing Number  is ${missingNumber([0, 1, 2, 3, 4, 6])}");
+}
+
+// missing number
+int missingNumber(List<int> arr) {
+  int currentSum = 0;
+  for (var element in arr) {
+    currentSum += element;
+  }
+  return (arr.length * (arr.length + 1)) ~/ 2 - currentSum;
 }
 
 // good pairs
@@ -19,7 +29,7 @@ int goodPair(List<int> arr) {
   print("My Good Pair dict = $dict");
 
   dict.forEach((key, value) {
-    numOfPair +=  (value * (value -1))~/2; // this is the main thing here, n*(n-1)/2
+    numOfPair += (value * (value - 1)) ~/ 2; // this is the main thing here, n*(n-1)/2
   });
 
   return numOfPair;
